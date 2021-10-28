@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subject, ReplaySubject } from 'rxjs';
+import { Subject, ReplaySubject, of } from 'rxjs';
 import { scan, reduce } from 'rxjs/operators';
 
 @Component({
@@ -20,6 +20,43 @@ export class GameScoreComponent {
      */
 
     /******************************/
+
+    // 1 ---- 3 ---- 5 ---- 10
+    // 1 ---- 4 ---- 9 ---- 19
+    // [1,3,5,10].reduce((acc, item) => acc + item); // result: 19
+
+    this.score$.pipe(
+      scan((acc, item) => acc + item, 0)
+    ).subscribe(score => {
+      this.currentScore = score;
+    });
+
+    ///
+
+    // IDEE Redux-Pattern / NgRx
+    of(
+      /*{ name: 'Ferdinand' },
+      { city: 'Leipzig' },
+      { name: 'RS', city: 'Benrath' },
+      { framework: 'Angular' },
+      { name: 'Rising Systems' },*/
+      'SETNAMEF',
+      'SETCITYL',
+      'SETNAMERS',
+      'XXXX',
+      'SETFRANG',
+    ).pipe(
+      scan((state: any, msg: string) => {
+        switch (msg) {
+          case 'SETFRANG': return { ...state, framework: 'Angular' };
+          case 'SETNAMEF': return { ...state, name: 'Ferdinand' };
+          case 'SETNAMERS': return { ...state, name: 'RS' };
+          case 'SETCITYL': return { ...state, city: 'Leipzig' };
+          case 'SETCITYB': return { ...state, city: 'Benrath' };
+          default: return state;
+        }
+      }, { name: '', city: '', framework: '' })
+    ).subscribe(e => console.log(e))
 
 
     /******************************/
