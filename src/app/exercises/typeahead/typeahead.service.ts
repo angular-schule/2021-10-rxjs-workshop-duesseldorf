@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, delay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 import { Book } from './book';
@@ -13,8 +13,13 @@ export class TypeaheadService {
   constructor(private http: HttpClient) { }
 
   search(term: string): Observable<Book[]> {
+    if (term.length === 0) {
+      return of([]);
+    }
+
     return this.http.get<Book[]>(this.apiUrl + term).pipe(
-      catchError(() => of([]))
+      catchError(() => of([])),
+      delay(1000)
     );
   }
 }
