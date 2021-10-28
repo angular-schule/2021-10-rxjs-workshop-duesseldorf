@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Subject, ReplaySubject, merge, concat, race, forkJoin, EMPTY } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject, ReplaySubject, merge, concat, race, forkJoin, EMPTY, timer, combineLatest, zip } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 
 @Component({
   selector: 'rxw-chat',
@@ -36,11 +36,23 @@ export class ChatComponent {
 
     /**************!!**************/
 
-     EMPTY.subscribe({                                   
+     zip(
+       this.msg.julia$,
+       this.msg.georg$,
+       this.msg.john$,
+     ).subscribe({
       next: e => this.log(e),
       error: err => this.log('❌ ERROR: ' + err),
       complete: () => this.log('✅ All members left')
     });
+
+
+    /*race(
+      timer(100).pipe(mapTo('Server A')),
+      timer(500).pipe(mapTo('Server B')),
+      timer(30).pipe(mapTo('Server C')),
+    ).subscribe(e => console.log(e));*/
+
 
     /**************!!**************/
   }
