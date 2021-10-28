@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Subject, ReplaySubject, Observable } from 'rxjs';
-import { mergeMap, concatMap, switchMap, exhaustMap } from 'rxjs/operators';
+import { Subject, ReplaySubject, Observable, of } from 'rxjs';
+import { mergeMap, concatMap, switchMap, exhaustMap, map, mergeAll, delay, toArray, subscribeOn, tap } from 'rxjs/operators';
 
 import { ExerciseService } from '../exercise.service';
 
@@ -29,7 +29,23 @@ export class HigherorderComponent {
     /**************!!**************/
 
     this.result$ = this.source$.pipe(
+      mergeMap(tier => this.es.echo(tier)),
     );
+
+      /*
+    of(
+      of('1').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('2').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('3').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('4').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('5').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('6').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+      of('7').pipe(tap(e => console.log('started', e)),delay(1000), tap(e => console.log('ended', e))),
+    ).pipe(
+      mergeAll(1),
+      toArray()
+    ).subscribe(e => console.log(e));
+    */
 
     /**************!!**************/
 
