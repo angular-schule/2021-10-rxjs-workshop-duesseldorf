@@ -14,11 +14,18 @@ export class MulticastComponent {
   listeners: string[] = [];
   logStream$ = new ReplaySubject<string>();
 
-  measureValues$: Observable<number>; // später: Subject<number>;
+  measureValues$: Subject<number>;
 
   constructor(private mvs: MeasureValuesService, private es: ExerciseService) {
     /**************!!**************/
-    this.measureValues$ = this.mvs.getValues();
+
+    // share: kaltes Observable "heiß machen"
+    // this.measureValues$ = this.mvs.getValues().pipe(share());
+    // this.measureValues$ = this.mvs.getValues().pipe(shareReplay(1)); // ab RxJS 7 nicht mehr empfohlen!
+
+    this.measureValues$ = new ReplaySubject(5);
+    this.mvs.getValues().subscribe(this.measureValues$);
+
     /**************!!**************/
 
   }
