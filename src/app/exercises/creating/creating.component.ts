@@ -23,7 +23,62 @@ export class CreatingComponent {
 
     /******************************/
 
-    
+
+    // of('A', 'B', 'R', 'S')
+    // const myArr = [1,2,3,4,5,6];
+    // from(myArr)
+    // interval(1000)
+    // timer(0, 1000)
+
+    timer(3000, 500).subscribe({
+      next: e => this.log(e),
+      complete: () => this.log('COMPLETE')
+    });
+
+
+
+    /******************************/
+
+    function producer(o: any) {
+      o.next(Math.random());
+      o.next(2);
+      setTimeout(() => {
+        o.next(3);
+      }, 2000);
+
+      setTimeout(() => {
+        o.complete();
+      }, 3000);
+    }
+
+    const myObs$ = new Observable(producer);
+
+    const observer = {
+      next: (e: any) => console.log(e),
+      error: (e: any) => console.error(e),
+      complete: () => console.log('COMPLETE')
+    };
+    // myObs$.subscribe(observer);
+
+
+    // producer(obs);
+
+
+    /*class MyObservable {
+      private producer: any;
+
+      constructor(producer: any) {
+        this.producer = producer;
+      }
+
+      subscribe(observer) {
+        const subscriber = this.sanitizeObserver(observer);
+        this.producer(subscriber);
+      }
+    }*/
+
+
+
     /******************************/
   }
 
