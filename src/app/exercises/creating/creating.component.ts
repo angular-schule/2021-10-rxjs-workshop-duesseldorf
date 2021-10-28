@@ -30,7 +30,10 @@ export class CreatingComponent {
     // interval(1000)
     // timer(0, 1000)
 
-    timer(3000, 500).subscribe({
+    timer(500, 500).pipe(
+      map(e => e * 3), // Projektionsfunktion
+      filter(e => e % 2 === 0) // Prädikatsfunktion
+    ).subscribe({
       next: e => this.log(e),
       complete: () => this.log('COMPLETE')
     });
