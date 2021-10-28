@@ -9,8 +9,8 @@ import { tap, scan } from 'rxjs/operators';
 })
 export class AsyncpipeComponent {
 
-  result?: number;
-  // result$: Observable<number>;
+  // result?: number;
+  result$: Observable<number>;
 
   constructor() {
 
@@ -20,13 +20,13 @@ export class AsyncpipeComponent {
 
     /**************!!**************/
 
-     timer(0, 700).pipe(
+     this.result$ = timer(0, 700).pipe(
       scan((acc, item) => acc + item, 0),
       tap({
         next: e => console.log(e),
         complete: () => console.log('✅ COMPLETE')
       }),
-     ).subscribe(e => this.result = e);
+     )// .subscribe(e => this.result = e);
 
     /**************!!**************/
   }
